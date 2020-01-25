@@ -91,7 +91,7 @@
 #define IS_REVERSE      ((SEGMENT.options & REVERSE )     == REVERSE     )
 #define IS_SELECTED     ((SEGMENT.options & SELECTED)     == SELECTED    )
 
-#define MODE_COUNT  99
+#define MODE_COUNT  101
 
 #define FX_MODE_STATIC                   0
 #define FX_MODE_BLINK                    1
@@ -192,6 +192,9 @@
 #define FX_MODE_DRIP                    96
 #define FX_MODE_PLASMA                  97
 #define FX_MODE_PERCENT                 98
+#define FX_MODE_RAINBOW_CYCLE_TRANSITION_ON 99
+#define FX_MODE_RAINBOW_CYCLE_TRANSITION_OFF 100
+
 
 class WS2812FX {
   typedef uint16_t (WS2812FX::*mode_ptr)(void);
@@ -379,12 +382,15 @@ class WS2812FX {
       _mode[FX_MODE_DRIP]                    = &WS2812FX::mode_drip;
       _mode[FX_MODE_PLASMA]                  = &WS2812FX::mode_plasma;
       _mode[FX_MODE_PERCENT]                 = &WS2812FX::mode_percent;
+      _mode[FX_MODE_RAINBOW_CYCLE_TRANSITION_ON] = &WS2812FX::mode_rainbow_cycle_transition_on;
+      _mode[FX_MODE_RAINBOW_CYCLE_TRANSITION_OFF] = &WS2812FX::mode_rainbow_cycle_transition_off;
 
       _brightness = DEFAULT_BRIGHTNESS;
       currentPalette = CRGBPalette16(CRGB::Black);
       targetPalette = CloudColors_p;
       ablMilliampsMax = 850;
       currentMilliamps = 0;
+      effectStartedAt = 0;
       timebase = 0;
       bus = new NeoPixelWrapper();
       resetSegments();
@@ -443,6 +449,7 @@ class WS2812FX {
       triwave16(uint16_t);
 
     uint32_t
+      effectStartedAt,
       timebase,
       color_wheel(uint8_t),
       color_from_palette(uint16_t, bool, bool, uint8_t, uint8_t pbri = 255),
@@ -562,8 +569,9 @@ class WS2812FX {
       mode_popcorn(void),
       mode_drip(void),
       mode_plasma(void),
-      mode_percent(void);
-      
+      mode_percent(void),
+      mode_rainbow_cycle_transition_on(void),
+      mode_rainbow_cycle_transition_off(void);
 
   private:
     NeoPixelWrapper *bus;
@@ -642,7 +650,7 @@ const char JSON_mode_names[] PROGMEM = R"=====([
 "Scanner Dual","Stream 2","Oscillate","Pride 2015","Juggle","Palette","Fire 2012","Colorwaves","Bpm","Fill Noise",
 "Noise 1","Noise 2","Noise 3","Noise 4","Colortwinkles","Lake","Meteor","Meteor Smooth","Railway","Ripple",
 "Twinklefox","Twinklecat","Halloween Eyes","Solid Pattern","Solid Pattern Tri","Spots","Spots Fade","Glitter","Candle","Fireworks Starburst",
-"Fireworks 1D","Bouncing Balls","Sinelon","Sinelon Dual","Sinelon Rainbow","Popcorn","Drip","Plasma","Percent"
+"Fireworks 1D","Bouncing Balls","Sinelon","Sinelon Dual","Sinelon Rainbow","Popcorn","Drip","Plasma","Percent","Rainbow Transition On","Rainbow Transition Off"
 ])=====";
 
 

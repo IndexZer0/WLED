@@ -375,6 +375,59 @@ uint16_t WS2812FX::mode_rainbow_cycle(void) {
   return FRAMETIME;
 }
 
+/*
+ * Cycles a rainbow over the entire string of LEDs.
+ */
+uint16_t WS2812FX::mode_rainbow_cycle_transition_on(void)
+{
+    uint16_t counter = (now * ((SEGMENT.speed >> 3) +2)) & 0xFFFF;
+    counter = counter >> 8;
+
+    long timeElapsedInEffect = millis() - effectStartedAt;
+
+    for(uint16_t i = 0; i < SEGLEN; i++)
+    {
+        if (timeElapsedInEffect - ((SEGLEN - i) * 10) > 0)
+        {
+            //intensity/29 = 0 (1/16) 1 (1/8) 2 (1/4) 3 (1/2) 4 (1) 5 (2) 6 (4) 7 (8) 8 (16)
+            uint8_t index = (i * (16 << (SEGMENT.intensity /29)) / SEGLEN) + counter;
+            setPixelColor(i, color_wheel(index));
+        }
+        else
+        {
+            setPixelColor(i, 0);
+        }
+    }
+
+    return FRAMETIME;
+}
+
+/*
+ * Cycles a rainbow over the entire string of LEDs.
+ */
+uint16_t WS2812FX::mode_rainbow_cycle_transition_off(void)
+{
+    uint16_t counter = (now * ((SEGMENT.speed >> 3) +2)) & 0xFFFF;
+    counter = counter >> 8;
+
+    long timeElapsedInEffect = millis() - effectStartedAt;
+
+    for(uint16_t i = 0; i < SEGLEN; i++)
+    {
+        if (timeElapsedInEffect - ((SEGLEN - i) * 10) > 0)
+        {
+            setPixelColor(i, 0);
+        }
+        else
+        {
+            //intensity/29 = 0 (1/16) 1 (1/8) 2 (1/4) 3 (1/2) 4 (1) 5 (2) 6 (4) 7 (8) 8 (16)
+            uint8_t index = (i * (16 << (SEGMENT.intensity /29)) / SEGLEN) + counter;
+            setPixelColor(i, color_wheel(index));
+        }
+    }
+
+    return FRAMETIME;
+}
 
 /*
  * theater chase function
