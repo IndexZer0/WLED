@@ -40,8 +40,8 @@ int currentState = STATE_OFF;
 long stateChangedAt = NULL;
 
 #define MAX_FLOW_DURATION 20000
-#define FLOW_TRANSITION_ON_DURATION 3000
-#define FLOW_TRANSITION_OFF_DURATION 3000
+#define FLOW_TRANSITION_ON_DURATION 4000
+#define FLOW_TRANSITION_OFF_DURATION 4000
 
 #define LOOP_DELAY 200
 long lastLoopTime = 0;
@@ -49,7 +49,7 @@ long lastLoopTime = 0;
 //gets called once at boot. Do all initialization that doesn't depend on network here
 void userSetup()
 {
-  ledCount = 300; // TODO
+  //ledCount = 387; // TODO
   setupSensors();
   stateOff();
 }
