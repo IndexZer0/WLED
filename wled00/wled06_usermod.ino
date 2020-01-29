@@ -24,7 +24,7 @@ int triggeredOnSensor = NULL;
 #define BOTTOM_STAIRS_ADDRESS 48 // 48 = 0x30
 
 #define TOP_STAIRS_THRESHOLD 600
-#define BOTTOM_STAIRS_THRESHOLD 600
+#define BOTTOM_STAIRS_THRESHOLD 1000
 
 VL53L0X_Sensor topStairsSensor = VL53L0X_Sensor(TOP_STAIRS_XSHUT_PIN, (uint8_t) TOP_STAIRS_ADDRESS, "Top Stairs", TOP_STAIRS_THRESHOLD);
 VL53L0X_Sensor bottomStairsSensor = VL53L0X_Sensor(BOTTOM_STAIRS_XSHUT_PIN, (uint8_t) BOTTOM_STAIRS_ADDRESS, "Bottom Stairs", BOTTOM_STAIRS_THRESHOLD);
@@ -49,7 +49,6 @@ long lastLoopTime = 0;
 //gets called once at boot. Do all initialization that doesn't depend on network here
 void userSetup()
 {
-  //ledCount = 387; // TODO
   setupSensors();
   stateOff();
 }
