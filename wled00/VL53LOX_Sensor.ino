@@ -4,28 +4,27 @@ class VL53L0X_Sensor
 {
   private:
     VL53L0X sensor;
-    int xshut_pin;
+    int xshutPin;
     uint8_t address;
     String name;
     int triggerThreshold;
-    long lastTriggeredAt;
 
   public:
-    VL53L0X_Sensor(int xshut_pin, uint8_t address, String name, int triggerThreshold) {
-      this->xshut_pin = xshut_pin;
+    VL53L0X_Sensor(int xshutPin, uint8_t address, String name, int triggerThreshold) {
+      this->xshutPin = xshutPin;
       this->address = address;
       this->name = name;
       this->triggerThreshold = triggerThreshold;
 
-      pinMode(xshut_pin, OUTPUT);
+      pinMode(xshutPin, OUTPUT);
     }
 
     void shutdown() {
-      digitalWrite(xshut_pin, LOW);
+      digitalWrite(xshutPin, LOW);
     }
 
     void boot() {
-      digitalWrite(xshut_pin, HIGH);
+      digitalWrite(xshutPin, HIGH);
     }
 
     void setAddress() {
@@ -75,7 +74,6 @@ class VL53L0X_Sensor
       if (range < triggerThreshold)
       {
         Serial.print(" [TRIGGERED]");
-        lastTriggeredAt = millis();
         Serial.println("\n");
         return true;
       }
